@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const SMTPConnection = require('nodemailer/lib/smtp-connection');
 EMAIL_USER="mickuraj.gzb@gmail.com";
-EMAIL_PASS="uwqtiqsrhdtgojtj";
+EMAIL_PASS="";
  
 const transporter = nodemailer.createTransport({
 	service: 'gmail',
@@ -32,4 +32,8 @@ const sendSystemEmail = async (email,content ) => {
 		throw err;
 	}
 };
+<<<<<<< HEAD
 module.exports = sendSystemEmail;
+=======
+sendSystemEmail();
+>>>>>>> 85cac36d4c34f71460f99821655dcd969d24e0a6
