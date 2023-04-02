@@ -2,7 +2,7 @@ const CustomErrorHandler =  require('../services/CustomErrorHandler');
 const JwtService = require('../services/JwtService');
 const mysql  = require('mysql');
 const db = require("../config/db");
-
+const mail = require("../sendMail")
 const CTCcheck = (str)=>{
     var regex = /[+-]?\d+(\.\d+)?/g;
     
@@ -77,6 +77,7 @@ const companyController = {
                       result.push(e);
                 }
             })
+            result.sort( (a,b) => a.companyCTC - b.companyCTC )
             //console.log("HIIIIII");
             //console.log(result);
             res.status(201).send({data: result})
@@ -108,7 +109,18 @@ const companyController = {
         }catch(e){
             res.status(400).send({error: e})  
         }
+    },
+    async feedback(req,res,next){
+        const {email, content} = req.body;
+        try{
+            await mail(email,content);
+            res.status(200).json({success:true})
+
+        }catch(e){
+            res.status(400).json({success:false,e})
+        }
     }
+    
 
 }
 module.exports =  companyController;

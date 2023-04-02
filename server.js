@@ -3,6 +3,7 @@ const {APP_PORT} = require("./config/index");
  const errorHandler = require("./middlewares/errorHandler");
 //const connectDB = require('./config/db');
 const app = express();
+
 const routes = require("./routes/index.js");
 //const routes = require('./routes/index');
 const cors = require("cors");

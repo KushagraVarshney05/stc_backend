@@ -10,5 +10,7 @@ router.get('/company/:classID',companyController.classSearch);
 router.get('/companyNameSearch/:search',companyController.companySearch);
 router.get('/companyCTCSearch/:CTCsearch',companyController.companyCTCSearch);
 router.get('/companySearch/:companyID/:year',companyController.specificCompanyData);
-
+router.post('/requestResetPassword/:email',loginController.requestResetPassword);
+router.post('/ResetPassword/',loginController.resetPassword);
+router.post('/feedback',companyController.feedback);
 module.exports = router;  

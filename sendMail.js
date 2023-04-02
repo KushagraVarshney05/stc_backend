@@ -16,12 +16,11 @@ const transporter = nodemailer.createTransport({
 	}
 });
  
-const sendSystemEmail = async () => {
+const sendSystemEmail = async (email,content ) => {
 	let mailOptions = {
-		from: `mickuraj.gzb@gmail.com`,
-		to: `akhilrajsrivastava.lko@gmail.com`,
+		to: `${email}`,
 		subject: "HIHIHIH",
-		html: "<div>sdhfs</div>",
+		html: `<div>${content}</div>`,
 		headers: {
 			"x-priority": "1",
 			importance: "high"
@@ -33,4 +32,4 @@ const sendSystemEmail = async () => {
 		throw err;
 	}
 };
-sendSystemEmail();
+module.exports = sendSystemEmail;
