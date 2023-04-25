@@ -4,8 +4,8 @@ const auth = require("../middlewares/auth");
 const router = express.Router();
 
 router.post('/login',loginController.login);
-router.get('/count',auth,companyController.count);
-router.get('/company/Allclass',auth,companyController.getAllClass);
+router.get('/count',companyController.count);
+router.get('/company/Allclass',companyController.getAllClass);
 router.get('/company/:classID',companyController.classSearch);
 router.get('/companyNameSearch/:search',companyController.companySearch);
 router.get('/companyCTCSearch/:CTCsearch',companyController.companyCTCSearch);

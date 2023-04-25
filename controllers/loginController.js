@@ -12,13 +12,13 @@ const loginController = {
             try{
                 const data = await db.promise().query(`Select * from StudentTable where LibraryID = '${LibraryID}'`);
                 if(!data[0]){
-                    console.log("HI")
+                   // console.log("HI")
                     return next(CustomErrorHandler.wrongCredentials());
                 }
                 
                 if(Password !== data[0][0].Password)
                 {
-                    console.log(Password, data[0].Password)
+                    //console.log(Password, data[0].Password)
                     return next(CustomErrorHandler.wrongCredentials());
                 }
                 const access_token = JwtService.sign({LibraryID,data: data[0][0].userName });
@@ -34,27 +34,27 @@ const loginController = {
     },
     async requestResetPassword(req,res,next){
         const {email} = req.params;
-        console.log(email);
+       // console.log(email);
         const data = await db.promise().query(`SELECT COUNT(email) as val FROM StudentTable WHERE email='${email}'`);
         const count = data[0][0].val;
         if(count>0)
         {
             try{
                 const reset_token = JwtService.sign({email},'600s',"abcde");
-                console.log(reset_token)
+                //console.log(reset_token)
                 const date = new Date();
                 const expiry = date.setTime(date.getTime() + 60*1000*10);//10 min
-               console.log("hii")
-                console.log(email,reset_token);
+            //    console.log("hii")
+            //     console.log(email,reset_token);
                 try{
-                    console.log("hi");
+                   // console.log("hi");
                     await db.promise().query(`Insert into reset_token values("${email}","${reset_token}","${expiry}")`);
 
                 }
                 catch(e){
                     res.json({e});
                 }
-                console.log("first");
+                //console.log("first");
                 
                 res.json({success:true,reset_token});
             }catch(e){
@@ -75,7 +75,7 @@ const loginController = {
                 const query = await db.promise().query(`Select expiry, email from reset_token where hashtoken="${reset_token}"`);
     
                 const data = query[0][0];
-                console.log(data);
+               // console.log(data);
                 const cuur_date = Date.now();
                 if(cuur_date > data.expiry)
                 {
