@@ -12,13 +12,13 @@ const loginController = {
             try{
                 const data = await db.promise().query(`Select * from StudentTable where email = '${LibraryID}'`);
                 if(!data[0]){
-                   // console.log("HI")
+                   console.log("HI")
                     return next(CustomErrorHandler.wrongCredentials());
                 }
                 
                 if(Password !== data[0][0].Password)
                 {
-                    //console.log(Password, data[0].Password)
+                    console.log(Password, data[0].Password)
                     return next(CustomErrorHandler.wrongCredentials());
                 }
                 const access_token = JwtService.sign({LibraryID,data: data[0][0].userName });
