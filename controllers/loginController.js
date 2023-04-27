@@ -8,6 +8,7 @@ const loginController = {
     async login(req,res,next){
         
         const {LibraryID, Password} = req.body;
+        console.log(LibraryID, Password);
         if(LibraryID && Password){
             try{
                 const data = await db.promise().query(`Select * from StudentTable where email = '${LibraryID}'`);
