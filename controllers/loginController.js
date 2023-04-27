@@ -10,7 +10,7 @@ const loginController = {
         const {LibraryID, Password} = req.body;
         if(LibraryID && Password){
             try{
-                const data = await db.promise().query(`Select * from StudentTable where LibraryID = '${LibraryID}'`);
+                const data = await db.promise().query(`Select * from StudentTable where email = '${LibraryID}'`);
                 if(!data[0]){
                    // console.log("HI")
                     return next(CustomErrorHandler.wrongCredentials());
