@@ -1,12 +1,13 @@
 
-const mysql = require('mysql2');
+const mysql = require('mysql');
 
 const db = {
   /* don't expose password or any sensitive info, done only for demo */
-  host: 'p3nlmysql173plsk.secureserver.net',
-  user: 'user12345',
-  password: 'Akh123456@',
-  database: 'src_check'
+  host: 'database-1.ccqfducx3ckk.us-east-1.rds.amazonaws.com',
+  user: 'admin',
+  password: 'Akh123456',
+  database: 'check_stc',
+  port: 3306
 }
 var connection;
 
@@ -23,7 +24,7 @@ function handleDisconnect() {
   });                                     
   connection.on('error', function(err) {
     console.log('db error', err);
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') { 
+    if(err) { 
       handleDisconnect();                       
     } else {                                    
       throw err;                               
