@@ -25,7 +25,7 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `addCompany` (IN `cName` VARCHAR(2047), IN `cClass` VARCHAR(255), IN `cDescrip` LONGTEXT, IN `cEstb` VARCHAR(255), IN `cWeb` VARCHAR(2047), IN `cAddedBy` VARCHAR(255))   begin
+CREATE  PROCEDURE `addCompany` (IN `cName` VARCHAR(2047), IN `cClass` VARCHAR(255), IN `cDescrip` LONGTEXT, IN `cEstb` VARCHAR(255), IN `cWeb` VARCHAR(2047), IN `cAddedBy` VARCHAR(255))   begin
 set @cClassID = (Select classID from class where className = cClass);
 set @uID = (Select userID from users where userEmail = cAddedBy);
 insert into company (companyName,companyClass,companyDescription,companyEstablishment,
@@ -40,11 +40,11 @@ current_date()
 );
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `addFeedBack` (IN `feed` LONGTEXT, IN `rID` INT(255))   begin
+CREATE  PROCEDURE `addFeedBack` (IN `feed` LONGTEXT, IN `rID` INT(255))   begin
 update companydatadivided set reportFeedBack=feed where dataID=rID;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `addReport` (IN `cName` VARCHAR(2047), IN `rNum` INT(255), IN `ctc` VARCHAR(255), IN `elgb` VARCHAR(255), IN `prof` VARCHAR(255), IN `fRN` VARCHAR(2047), IN `fRDesc` LONGTEXT, IN `fRDu` INT(255), IN `sRN` VARCHAR(2047), IN `sRDesc` LONGTEXT, IN `sRDu` VARCHAR(255), IN `tRN` VARCHAR(2047), IN `tRDesc` LONGTEXT, IN `tRDu` VARCHAR(255), IN `foRN` VARCHAR(2047), IN `foRDesc` LONGTEXT, IN `foRDu` VARCHAR(255), IN `mRDesc` LONGTEXT, IN `suggestions` LONGTEXT, IN `addBy` VARCHAR(255), IN `addYr` VARCHAR(255))   begin
+CREATE  PROCEDURE `addReport` (IN `cName` VARCHAR(2047), IN `rNum` INT(255), IN `ctc` VARCHAR(255), IN `elgb` VARCHAR(255), IN `prof` VARCHAR(255), IN `fRN` VARCHAR(2047), IN `fRDesc` LONGTEXT, IN `fRDu` INT(255), IN `sRN` VARCHAR(2047), IN `sRDesc` LONGTEXT, IN `sRDu` VARCHAR(255), IN `tRN` VARCHAR(2047), IN `tRDesc` LONGTEXT, IN `tRDu` VARCHAR(255), IN `foRN` VARCHAR(2047), IN `foRDesc` LONGTEXT, IN `foRDu` VARCHAR(255), IN `mRDesc` LONGTEXT, IN `suggestions` LONGTEXT, IN `addBy` VARCHAR(255), IN `addYr` VARCHAR(255))   begin
 set @cID = (select companyID from company where companyName = cName);
 set @addID = (select userID from users where userEmail = addBy);
 INSERT INTO companydatadivided
@@ -63,11 +63,11 @@ INSERT INTO companydatadivided
  @addID,addYr);
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `adminUser` (IN `aName` VARCHAR(2047), IN `aEmail` VARCHAR(2047), IN `aPassword` VARCHAR(2047), IN `aType` VARCHAR(255))   begin
+CREATE  PROCEDURE `adminUser` (IN `aName` VARCHAR(2047), IN `aEmail` VARCHAR(2047), IN `aPassword` VARCHAR(2047), IN `aType` VARCHAR(255))   begin
 insert into users (userName,userEmail,userPassword,userType) values (aName,aEmail,aPassword,aType);
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `approveReject` (IN `rID` INT(255), IN `stat` VARCHAR(255))   begin
+CREATE  PROCEDURE `approveReject` (IN `rID` INT(255), IN `stat` VARCHAR(255))   begin
 if(stat = 'Approved')
 then
 update companydatadivided set companyReportApprovalStatus = 'Approved' where dataID = rID;
@@ -78,21 +78,21 @@ update companydatadivided set companyReportApprovalStatus = 'Rejected' where dat
 end if;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `deleteAdmin` (IN `aID` INT(255))   begin
+CREATE  PROCEDURE `deleteAdmin` (IN `aID` INT(255))   begin
 delete from users where userID = aID;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `deleteReport` (IN `did` INT(255))   begin
+CREATE  PROCEDURE `deleteReport` (IN `did` INT(255))   begin
 delete from companydatadivided where dataID=did;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `fetchCompanyDetail` (IN `cID` INT(255))   begin
+CREATE  PROCEDURE `fetchCompanyDetail` (IN `cID` INT(255))   begin
 select c.className as companyClassName,company.* from company inner join 
 class c on company.companyClass = c.classID
  where companyID = cID;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `filteredReports` (IN `uEmail` VARCHAR(2047), IN `keyword` VARCHAR(255))   begin
+CREATE  PROCEDURE `filteredReports` (IN `uEmail` VARCHAR(2047), IN `keyword` VARCHAR(255))   begin
 if(keyword = 'All')
 then
 select cd.*,c.companyName as companyName,u.userName as addedBy from companydatadivided cd
@@ -130,7 +130,7 @@ where u.userEmail <> uEmail and cd.companyReportApprovalStatus = 'Rejected';
 end if;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `filteredReportsUser` (IN `uEmail` VARCHAR(2047), IN `keyword` VARCHAR(255))   begin
+CREATE  PROCEDURE `filteredReportsUser` (IN `uEmail` VARCHAR(2047), IN `keyword` VARCHAR(255))   begin
 if(keyword = 'All')
 then
 select cd.*,c.companyName as companyName,u.userName as addedBy from companydatadivided cd
@@ -168,11 +168,11 @@ where u.userEmail = uEmail and cd.companyReportApprovalStatus = 'Rejected';
 end if;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `listAllAdmins` ()   begin
+CREATE  PROCEDURE `listAllAdmins` ()   begin
 select * from users;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `listAllCompanies` ()   begin
+CREATE  PROCEDURE `listAllCompanies` ()   begin
 select c.className as companyClassName,company.*,users.userName as companyAddName from company inner join 
 class c on company.companyClass = c.classID
 inner join users on company.companyAddedBy = users.userID
@@ -180,28 +180,28 @@ inner join users on company.companyAddedBy = users.userID
 
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `listReports` (IN `uEmail` VARCHAR(2047))   begin
+CREATE  PROCEDURE `listReports` (IN `uEmail` VARCHAR(2047))   begin
 select cd.*,c.companyName as companyName,u.userName as addedBy from companydatadivided cd
 inner join company c on cd.companyid = c.companyID
 inner join users u on u.userID = cd.companyReportAddedBy
 where u.userEmail <> uEmail;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `listUserReports` (IN `uEmail` VARCHAR(2047))   begin
+CREATE  PROCEDURE `listUserReports` (IN `uEmail` VARCHAR(2047))   begin
 select cd.*,c.companyName as companyName,u.userName as addedBy from companydatadivided cd
 inner join company c on cd.companyid = c.companyID
 inner join users u on u.userID = cd.companyReportAddedBy
 where u.userEmail = uEmail;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `reportDetail` (IN `rID` INT(255))   begin
+CREATE  PROCEDURE `reportDetail` (IN `rID` INT(255))   begin
 select cd.*,c.companyName as companyName,u.userName as addedBy from companydatadivided cd
 inner join company c on cd.companyid = c.companyID
 inner join users u on u.userID = cd.companyReportAddedBy
 where cd.dataID = rID;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `reportView` (IN `rID` INT(255))   begin
+CREATE  PROCEDURE `reportView` (IN `rID` INT(255))   begin
 select cd.*,c.companyName as companyName,cl.className,c.companyDescription,c.companyEstablishment,c.companyWebsite,u.userName as addedBy from companydatadivided cd
 inner join company c on cd.companyid = c.companyID
 inner join users u on u.userID = cd.companyReportAddedBy
@@ -209,7 +209,7 @@ inner join class cl on cl.classID = c.companyClass
 where cd.dataID = rID;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `updateCompany` (IN `cID` INT(255), IN `cName` VARCHAR(2047), IN `cClass` VARCHAR(255), IN `cDescrip` LONGTEXT, IN `cEstb` VARCHAR(255), IN `cWeb` VARCHAR(2047))   begin
+CREATE  PROCEDURE `updateCompany` (IN `cID` INT(255), IN `cName` VARCHAR(2047), IN `cClass` VARCHAR(255), IN `cDescrip` LONGTEXT, IN `cEstb` VARCHAR(255), IN `cWeb` VARCHAR(2047))   begin
 set @cClassID = (Select classID from class where className = cClass);
 update company set
 companyName = cName,
@@ -220,7 +220,7 @@ companyWebsite = cWeb
 where companyID = cID;
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `updatereport` (IN `rNum` INT(255), IN `ctc` VARCHAR(255), IN `elgb` VARCHAR(255), IN `prof` VARCHAR(255), IN `fRN` VARCHAR(2047), IN `fRDesc` LONGTEXT, IN `fRDu` VARCHAR(255), IN `sRN` VARCHAR(2047), IN `sRDesc` LONGTEXT, IN `sRDu` VARCHAR(255), IN `tRN` VARCHAR(2047), IN `tRDesc` LONGTEXT, IN `tRDu` VARCHAR(255), IN `foRN` VARCHAR(2047), IN `foRDesc` LONGTEXT, IN `foRDu` VARCHAR(255), IN `mRDesc` LONGTEXT, IN `suggestions` LONGTEXT, IN `reportID` INT(255), IN `addYr` VARCHAR(255))   begin
+CREATE  PROCEDURE `updatereport` (IN `rNum` INT(255), IN `ctc` VARCHAR(255), IN `elgb` VARCHAR(255), IN `prof` VARCHAR(255), IN `fRN` VARCHAR(2047), IN `fRDesc` LONGTEXT, IN `fRDu` VARCHAR(255), IN `sRN` VARCHAR(2047), IN `sRDesc` LONGTEXT, IN `sRDu` VARCHAR(255), IN `tRN` VARCHAR(2047), IN `tRDesc` LONGTEXT, IN `tRDu` VARCHAR(255), IN `foRN` VARCHAR(2047), IN `foRDesc` LONGTEXT, IN `foRDu` VARCHAR(255), IN `mRDesc` LONGTEXT, IN `suggestions` LONGTEXT, IN `reportID` INT(255), IN `addYr` VARCHAR(255))   begin
 update companydatadivided set
 companyNumOfRounds = rNum, companyCTC = ctc , 
 companyEligibility = elgb, companyJOBProfile = prof, companyFirstRoundName = fRN, 
@@ -232,7 +232,7 @@ companyPracticeDetails = suggestions,companyReportYear=addYr
 where dataID = reportID; 
 end$$
 
-CREATE DEFINER=`stc_admin`@`%` PROCEDURE `verifyUser` (IN `uEmail` VARCHAR(2047), IN `uPassword` VARCHAR(2047))   begin
+CREATE  PROCEDURE `verifyUser` (IN `uEmail` VARCHAR(2047), IN `uPassword` VARCHAR(2047))   begin
 set @count = (Select count(1) from users where userEmail = uEmail);
 if(@count = 0)
 then
