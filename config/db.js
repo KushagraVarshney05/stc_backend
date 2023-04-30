@@ -6,7 +6,7 @@ const db = {
   host: 'database-1.ccqfducx3ckk.us-east-1.rds.amazonaws.com',
   user: 'admin',
   password: 'Akh123456',
-  database: 'check_stc',
+  database: 'Data',
   port: 3306
 }
 var connection;
