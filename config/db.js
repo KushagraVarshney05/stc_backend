@@ -1,5 +1,5 @@
 
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 const db = {
   /* don't expose password or any sensitive info, done only for demo */
