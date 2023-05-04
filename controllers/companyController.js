@@ -25,7 +25,7 @@ const companyController = {
         // console.log(typeof(classID))
         // console.log(2,classID);
         try{
-            const data = await db.promise().query(`SELECT company.companyID, company.companyName ,companydatadivided.companyEligibility, companydatadivided.companyJOBProfile  , companydatadivided.companyCTC FROM company INNER JOIN companydatadivided ON companydatadivided.companyID = company.companyID where company.companyClass = ${parseInt(classID)} AND companydatadivided.companyReportApprovalStatus = "Approved"`);
+            const data = await db.promise().query(`SELECT company.companyID, company.companyName ,companydatadivided.companyEligibility, companydatadivided.companyJOBProfile  , companydatadivided.companyCTC FROM company INNER JOIN companydatadivided ON companydatadivided.companyID = company.companyID where company.companyClass = ${parseInt(classID)} AND companydatadivided.companyReportApprovalStatus = "Approved" AND companydatadivided.companyReportYear=(SELECT MAX(companydatadivided.companyReportYear) from companydatadivided)`);
             
             res.status(201).send({data: data[0]})
         }catch(e){
@@ -101,7 +101,7 @@ const companyController = {
         try{
             let data = await db.promise().query(`Select * from companydatadivided where companyID = ${parseInt(companyID)} AND companyReportYear = ${parseInt(year)}`);
             //console.log(data[0][0]);
-            const data2 = await db.promise().query(`Select companyName, companyWebsite from company where companyID = ${parseInt(companyID)}`);
+            const data2 = await db.promise().query(`Select companyName, companyWebsite, ImageID from company where companyID = ${parseInt(companyID)}`);
             //console.log(data2[0][0]);
             data = {...data[0][0],...data2[0][0]};
             //console.log(data);
@@ -119,8 +119,47 @@ const companyController = {
         }catch(e){
             res.status(400).json({success:false,e})
         }
+    },
+    async islike(req,res){
+        const {email} = req.params;
+        //console.log(email);
+        try{
+
+            const data = await db.promise().query(`select count(*) as count from ReportLike where email = "${email}"`);
+            if(data[0][0].count > 0)
+             res.status(200).json({aliked: true,})
+            else 
+            res.status(200).json({aliked: false}); 
+        }catch(e){
+            res.status(400).json({success: false}); 
+        }
+        
+    },
+    async countlike(req,res){
+        const {email} = req.params;
+        //console.log(email);
+        try{
+
+            const data = await db.promise().query(`select count(*) as count from ReportLike`);
+             res.status(200).json({count: data[0][0].count})
+            
+        }catch(e){
+            res.status(400).json({success: false}); 
+        }
+        
+    },
+    async like(req,res,next){
+        const {email} = req.params;
+        console.log(email)
+        try{
+            
+            const data = await db.promise().query(`Insert into ReportLike values("${email}")`);
+            res.status(200).json({success: true})
+        }catch(e)
+        {
+            res.status(404).json({success: false})
+        }
     }
-    
 
 }
 module.exports =  companyController;
