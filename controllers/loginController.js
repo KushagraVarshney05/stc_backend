@@ -71,7 +71,7 @@ const loginController = {
             params: {
                 email,
                 name: email,
-                link: `http://localhost:3001/reset/${token}`,
+                link: `http://student.kietconnectx.com/reset/${token}`,
                 mailType: "reset-pwd-link"
             }
         };
