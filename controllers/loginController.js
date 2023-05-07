@@ -4,6 +4,8 @@ const mysql  = require('mysql');
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
 const mail = require("../sendMail");
+const { uuid } = require("uuidv4");
+const kue = require("../scheduler/kue");
 const loginController = {
     async login(req,res,next){
         
@@ -12,14 +14,17 @@ const loginController = {
         if(LibraryID && Password){
             try{
                 const data = await db.promise().query(`Select * from StudentTable where email = '${LibraryID}'`);
+                
                 if(!data[0]){
-                   console.log("HI")
+                   //console.log("HI")
                     return next(CustomErrorHandler.wrongCredentials());
                 }
                 
-                if(Password !== data[0][0].Password)
+                //console.log(hashPassword)
+                const comp = await bcrypt.compare(Password,data[0][0].Password)
+                if(comp === false)
                 {
-                    console.log(Password, data[0].Password)
+                    //console.log(Password, data[0].Password)
                     return next(CustomErrorHandler.wrongCredentials());
                 }
                 const access_token = JwtService.sign({LibraryID,data: data[0][0].userName });
@@ -34,72 +39,119 @@ const loginController = {
         }
     },
     async requestResetPassword(req,res,next){
+        console.log("HI")
         const {email} = req.params;
-       // console.log(email);
-        const data = await db.promise().query(`SELECT COUNT(email) as val FROM StudentTable WHERE email='${email}'`);
-        const count = data[0][0].val;
-        if(count>0)
-        {
-            try{
-                const reset_token = JwtService.sign({email},'600s',"abcde");
-                //console.log(reset_token)
-                const date = new Date();
-                const expiry = date.setTime(date.getTime() + 60*1000*10);//10 min
-            //    console.log("hii")
-            //     console.log(email,reset_token);
-                try{
-                   // console.log("hi");
-                    await db.promise().query(`Insert into reset_token values("${email}","${reset_token}","${expiry}")`);
+        try{
 
+            const data = await db.promise().query(`SELECT COUNT(email) as val FROM StudentTable WHERE email='${email}'`);
+            
+            const count = data[0][0].val;
+            console.log(count);
+            if(count>0)
+            {
+             try{
+                console.log(2)
+                const data = await db.promise().query(`SELECT COUNT(email) as val FROM RESETTOKEN where email="${email}"`);
+                if(data[0][0].val > 0)
+                {
+                    await db.promise().query(`DELETE FROM RESETTOKEN where email="${email}"`)
                 }
-                catch(e){
-                    res.json({e});
+                const token = uuid();
+                try{
+
+                  await db.promise().query(`Insert into RESETTOKEN(email,token,expiryTime) values("${email}","${token}","${Date.now()+3600000}")`);
                 }
-                //console.log("first");
-                
-                res.json({success:true,reset_token});
-            }catch(e){
-                res.json({success: false,e});
+                 catch(e)
+                 {
+                  res.status(500).json({success: false});
+                 }
+        const args = {
+            jobName: "sendSystemEmailJob",
+            time: Date.now(),
+            params: {
+                email,
+                name: email,
+                link: `http://localhost:3001/reset/${token}`,
+                mailType: "reset-pwd-link"
             }
+        };
+        kue.scheduleJob(args);
+        res.status(200).json({success: true});
+            }
+            catch(e){
+                res.status(500).json({success: false});
+            }
+            
         }
-        else{
-            return next(CustomErrorHandler.wrongCredentials());
         }
+        catch(e){
+            res.status(500).json({success: false});
+        }
+        
         
     },
     async resetPassword(req,res,next){
-        const {reset_token,password} = req.body;
+        const {token,password} = req.body;
         try{
-            const email = await JwtService.verify(reset_token,"abcde");
-
-            try{
-                const query = await db.promise().query(`Select expiry, email from reset_token where hashtoken="${reset_token}"`);
-    
-                const data = query[0][0];
-               // console.log(data);
-                const cuur_date = Date.now();
-                if(cuur_date > data.expiry)
-                {
-                    return next(CustomErrorHandler.wrongCredentials());
-                }
-                try{
-                    const query = await db.promise().query(`Update StudentTable SET Password="${password}" where email="${data.email}"`);
-                    res.status(200).json({success:true});
-                }
-                catch(e){
+           console.log(1);
+            const data = await db.promise().query(`SELECT COUNT(token) as val FROM RESETTOKEN where token="${token}"`);
+            console.log(2);
+            console.log(data[0][0])
+            if(data[0][0].val > 0)
+            {
+                console.log(3);
+                  try{
+                    console.log(4);
+                      const details = await db.promise().query(`Select expiryTime,email from RESETTOKEN where  token="${token}"`);
+                      const expiryTime = details[0][0].expiryTime;
+                      const email = details[0][0].email;
+                      console.log(5);
+                      if(expiryTime<Date.now())
+                      {
+                        console.log(6);
+                        try{
+                            console.log(7);
+                            const hashPassword = bcrypt.hashSync(password,10);
+                            console.log(hashPassword)
+                            console.log(password)
+                            db.promise().query(`Update StudentTable SET Password="${hashPassword}" where email="${email}"`);
+                            console.log(8);
+                        }catch(e)
+                        {
+                            console.log(9);
+                            return next(CustomErrorHandler.serverError());
+                        }
+                      }
+                      else
+                      {
+                        console.log(10);
+                        res.status(403).json({success: false, err: "Token expire"});
+                        console.log(11);
+                      }
+                      try{
+                        console.log(12);
+                          await db.promise().query(`DELETE FROM RESETTOKEN where email="${email}"`);
+                          console.log(13);
+                          res.status(200).json({success: true})
+                      }catch(e){
+                        console.log(14);
+                        res.status(500).json({err:"DELETE FROM RESETTOKEN"})
+                        console.log(15);
+                      }
+                  }catch(e)
+                  {
+                    console.log(16);
                     return next(CustomErrorHandler.serverError());
-                }
-                
-            }catch(e){
-                res.status(500);
+                     console.log(17);
+                  }
+    
             }
+            else{
+                return next(CustomErrorHandler.serverError());
+            }
+        }catch(e){
+            return next(CustomErrorHandler.serverError());
         }
-        catch(e){
-            return next(CustomErrorHandler.wrongCredentials());
-        }
-        
-        // if()
-        res.status(400);
     }
 }
 module.exports =  loginController;

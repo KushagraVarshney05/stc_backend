@@ -1,7 +1,9 @@
 const nodemailer = require('nodemailer');
+var htmlToText = require("nodemailer-html-to-text").htmlToText;
 const SMTPConnection = require('nodemailer/lib/smtp-connection');
+const {getMailTemplate} = require("./emailTemplates")
 EMAIL_USER="mickuraj.gzb@gmail.com";
-EMAIL_PASS="";
+EMAIL_PASS="pvncgczqwowvstsr";
  
 const transporter = nodemailer.createTransport({
 	service: 'gmail',
@@ -16,16 +18,18 @@ const transporter = nodemailer.createTransport({
 	}
 });
  
-const sendSystemEmail = async (email,content ) => {
+const sendSystemEmail = async (email,content,type ) => {
+	let { subject, html } = getMailTemplate(content, type);
 	let mailOptions = {
 		to: `${email}`,
-		subject: "HIHIHIH",
-		html: `<div>${content}</div>`,
+		subject,
+		html,
 		headers: {
 			"x-priority": "1",
 			importance: "high"
 		}
 	};
+	transporter.use("compile", htmlToText());
 	try {
 		await transporter.sendMail(mailOptions);
 	} catch (err) {

@@ -6,21 +6,18 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+const worker = require("./scheduler/worker")
+const kue = require("./scheduler/kue")
 const routes = require("./routes/index.js");
 //const routes = require('./routes/index');
 const cors = require("cors");
+// const kue = require("kue");
 var count=0;
-const counting =(req,res,next)=>{
-   ++count;
-   console.log(count);
-   next();
-}
+
 app.use(cors());
 app.use(express.json());
- app.use('/api',counting,routes);
-app.get('/views',(req,res)=>{
-    res.json({count});
-})
+ app.use('/api',routes);
+
 app.use(errorHandler);
 
 app.listen(APP_PORT,()=>{
