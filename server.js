@@ -2,18 +2,19 @@ const express = require('express');
 const {APP_PORT} = require("./config/index");
  const errorHandler = require("./middlewares/errorHandler");
 const bodyParser = require('body-parser');
-//const connectDB = require('./config/db');
+const compression = require("compression");
+const helmet = require("helmet");
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json());
 const worker = require("./scheduler/worker")
 const kue = require("./scheduler/kue")
 const routes = require("./routes/index.js");
-//const routes = require('./routes/index');
 const cors = require("cors");
-// const kue = require("kue");
-var count=0;
 
+app.use(compression());
+app.use(helmet());
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cors());
 app.use(express.json());
  app.use('/api',routes);
