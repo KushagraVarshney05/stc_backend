@@ -38,7 +38,7 @@ const getFullHTML = (content, name) => {
                                                                 valign="top">Hi ${
 																	name
 																}<br><br>Greetings from STC KIET!<br /><br />${content}<br /><br />
-                                                                    Feel free to drop us an email at
+                                                                    Drop us an email at
                                                                     <a
                                                                         style="font-weight: 700; color: #0850fd; text-decoration: none"
                                                                         href="mailto:stc@kiet.edu"
@@ -79,7 +79,7 @@ const getFullHTML = (content, name) => {
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </div
     </body>
 
     </html>`;
