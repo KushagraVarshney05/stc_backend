@@ -10,8 +10,8 @@ const counting =(req,res,next)=>{
  }
 
 router.post('/login',loginController.login);
-router.get('/count',companyController.count);
-router.get('/company/Allclass',counting,auth,counting,companyController.getAllClass);
+router.get('/count',counting,companyController.count);
+router.get('/company/Allclass',auth,counting,companyController.getAllClass);
 router.get('/company/:classID',auth,companyController.classSearch);
 router.get('/companyNameSearch/:search',auth,companyController.companySearch);
 router.get('/companyCTCSearch/:CTCsearch',auth,companyController.companyCTCSearch);
