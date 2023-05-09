@@ -2,8 +2,8 @@ const nodemailer = require('nodemailer');
 var htmlToText = require("nodemailer-html-to-text").htmlToText;
 const SMTPConnection = require('nodemailer/lib/smtp-connection');
 const {getMailTemplate} = require("./emailTemplates")
-EMAIL_USER="mickuraj.gzb@gmail.com";
-EMAIL_PASS="pvncgczqwowvstsr";
+EMAIL_USER="connectxstc@gmail.com";
+EMAIL_PASS="kqtlzeratcjlbcxp";
  
 const transporter = nodemailer.createTransport({
 	service: 'gmail',

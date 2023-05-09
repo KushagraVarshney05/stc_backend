@@ -20,10 +20,7 @@ const companyController = {
       }
     },
     async classSearch(req,res,next){
-        //console.log("HI");
         const {classID} = req.params;
-        // console.log(typeof(classID))
-        // console.log(2,classID);
         try{
             const data = await db.promise().query(`SELECT company.companyID, company.companyName ,companydatadivided.companyEligibility, companydatadivided.companyJOBProfile  , companydatadivided.companyCTC FROM company INNER JOIN companydatadivided ON companydatadivided.companyID = company.companyID where company.companyClass = ${parseInt(classID)} AND companydatadivided.companyReportApprovalStatus = "Approved" AND companydatadivided.companyReportYear=(SELECT MAX(companydatadivided.companyReportYear) from companydatadivided)`);
             
@@ -35,10 +32,7 @@ const companyController = {
          
     },
     async companySearch(req,res,next){
-        //console.log(5,"HI");
         const {search} = req.params;
-        // console.log(typeof(search))
-        // console.log(2,search);
         try{
             const data = await db.promise().query(`SELECT company.companyID, company.companyName ,companydatadivided.companyEligibility, companydatadivided.companyJOBProfile  , companydatadivided.companyCTC FROM company INNER JOIN companydatadivided ON companydatadivided.companyID = company.companyID where LOWER(company.companyName) LIKE "${search}%" AND companydatadivided.companyReportApprovalStatus = "Approved"`);
             
@@ -50,10 +44,8 @@ const companyController = {
          
     },
     async companyCTCSearch(req,res,next){
-        //console.log(5,"HI");
         const {CTCsearch} = req.params;
         const ctc = parseFloat(CTCsearch);
-        //console.log(ctc);
         try{
             const searchdata = await db.promise().query(`SELECT company.companyID, company.companyName ,companydatadivided.companyEligibility, companydatadivided.companyJOBProfile  , companydatadivided.companyCTC FROM company INNER JOIN companydatadivided ON companydatadivided.companyID = company.companyID where  companydatadivided.companyReportApprovalStatus = "Approved"`);
             data = searchdata[0];
@@ -61,25 +53,19 @@ const companyController = {
             //console.log(data);
             data.forEach(async(e)=>{
                 const CTC = CTCcheck(e.companyCTC);
-                //console.log(1111111111, CTC[0])
                 if(CTC.length > 0)
                 {
                     const paisa = [];
                     CTC.map((r)=>{
-                        //console.log("Helo");
                       if(r>=ctc){
-                        //console.log(r);
                         paisa.push(r);
                       }
                     })
-                    //console.log(paisa);
                     if(paisa.length > 0)
                       result.push(e);
                 }
             })
             result.sort( (a,b) => a.companyCTC - b.companyCTC )
-            //console.log("HIIIIII");
-            //console.log(result);
             res.status(201).send({data: result})
         }catch(e){
             res.status(400).send({error: e})  

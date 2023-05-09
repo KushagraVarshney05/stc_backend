@@ -2,7 +2,7 @@ const express = require("express");
 const {loginController, companyController} = require("../controllers");
 const auth = require("../middlewares/auth");
 const router = express.Router();
-
+var count=0;
 const counting =(req,res,next)=>{
     ++count;
     console.log(count);
@@ -11,7 +11,7 @@ const counting =(req,res,next)=>{
 
 router.post('/login',loginController.login);
 router.get('/count',companyController.count);
-router.get('/company/Allclass',counting,auth,companyController.getAllClass);
+router.get('/company/Allclass',counting,auth,counting,companyController.getAllClass);
 router.get('/company/:classID',auth,companyController.classSearch);
 router.get('/companyNameSearch/:search',auth,companyController.companySearch);
 router.get('/companyCTCSearch/:CTCsearch',auth,companyController.companyCTCSearch);
