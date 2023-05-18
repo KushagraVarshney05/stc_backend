@@ -1,6 +1,7 @@
 const db = require("./config/db");
 const bcrypt = require('bcryptjs');
 const generator = require('generate-password');
+const xlsxFile = require('read-excel-file/node');
 
 const getdata = async () => {
     console.log("HI");
@@ -33,33 +34,40 @@ const getdata = async () => {
 //    })
    //console.log(data[0]);
 }
-getdata();
+// getdata();
 
+xlsxFile('./mca.xlsx')
+  .then((rows) => {
+    const columnNames = rows.shift(); // Separate first row with column names
+    const objs = rows.map((row) => { // Map the rest of the rows into objects
+      return {
+        email: row[5],
+        userName: row[2]
+      }
+      //console.log(objs); // Display the array of objects on the console
+    });
+    console.log(objs);
+    objs.map(async(d)=>{
+             const userName = d.userName;
+             const email = d.email;
+             const Password = generator.generate({
+                length: 7,
+                numbers: true
+            });
+            try{
+        
+                const hashPassword = bcrypt.hashSync(Password,10,);
+                if(email)
+                {
 
-// SELECT Student.KIET_EMAIL from Student INNER JOIN StudentTable where Student.KIET_EMAIL != StudentTable.email;
+                    await db.promise().query(`INSERT INTO StudentTable(userName, email, Password) values("${userName}","${email}","${hashPassword}")`);
+                    //console.log("add "+ userName + " "+ email + " " + hashPassword);
+                }
+            }catch(e){
+                console.log(e)
+            }
+            // console.log(hashPassword)
+            //console.log("HI")
+           })
+  });
 
-// aastha.2024bph1085@kiet.edu
-// aastha.2024bph1074@kiet.edu
-// abhay.2024bph1099@kiet.edu
-// abhishek.2024bph1027@kiet.edu
-// afzal.2024bph1025@kiet.edu
-// akansha.2024bph1075@kiet.edu
-// akshay.2024bph1088@kiet.edu
-// aman.2024bph1054@kiet.edu
-// amit.2024bph1016@kiet.edu
-// amit.2024bph1077@kiet.edu
-// anchal.2024bph1053@kiet.edu
-// anirudh.2024bph1098@kiet.edu
-// anmol.2024bph1008@kiet.edu
-// anubhav.2024bph1076@kiet.edu
-// anushka.2024bph1024@kiet.edu
-// apurva.2024bph1045@kiet.edu
-// arshalan.2024bph1001@kiet.edu
-// aryan.2024bph1083@kiet.edu
-// aryan.2024bph1005@kiet.edu
-// ashish.2024bph1065@kiet.edu
-// ashutosh.2024bph1030@kiet.edu
-// ashwin.2024bph1105@kiet.edu
-// ayush.2024bph1096@kiet.edu
-// ayushmann.2024bph1092@kiet.edu
-// deep.2024bph1066@kiet.edu

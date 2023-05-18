@@ -1,13 +1,14 @@
 const express = require("express");
 const {loginController, companyController} = require("../controllers");
 const auth = require("../middlewares/auth");
+const counting = require("../middlewares/counting")
 const router = express.Router();
-var count=0;
-const counting =(req,res,next)=>{
-    ++count;
-    console.log(count);
-    next();
- }
+var count=374;
+// const counting =(req,res,next)=>{
+    
+//     console.log(count);
+//     next();
+//  }
 
 router.post('/login',loginController.login);
 router.get('/count',counting,companyController.count);
@@ -22,7 +23,5 @@ router.get('/companySearch/:companyID/:year',auth,companyController.specificComp
 router.get('/requestResetPassword/:email',loginController.requestResetPassword);
 router.post('/ResetPassword/',loginController.resetPassword);
 router.post('/feedback',companyController.feedback);
-router.get('/views',(req,res)=>{
-    res.json({count});
-})
+router.get('/views',loginController.views)
 module.exports = router;  

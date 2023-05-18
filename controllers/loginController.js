@@ -7,6 +7,19 @@ const mail = require("../sendMail");
 const { uuid } = require("uuidv4");
 const kue = require("../scheduler/kue");
 const loginController = {
+    async views(req,res,next){
+            try{
+
+                const data = await db.promise().query(`SELECT count(*) as count FROM Views`);
+                //console.log(data[0][0].count);
+                const count = data[0][0].count + 374;
+                res.json({count});
+            }catch(e)
+            {
+                res.json({e});
+            }
+            //const count = data[0].count+375;
+    },
     async login(req,res,next){
         
         const {LibraryID, Password} = req.body;
