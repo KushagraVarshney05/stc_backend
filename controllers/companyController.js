@@ -83,7 +83,7 @@ const companyController = {
        const {companyID} = req.params;
        try{
              const data = await db.promise().query(`SELECT companyReportYear FROM companydatadivided WHERE companyID = ${parseInt(companyID)} GROUP BY companyReportYear ORDER BY companyReportYear DESC;`)
-             res.status(200).send({data});
+             res.status(200).send({data: data[0]});
        }catch(e)
        {
         res.status(400).send({error: e})  
