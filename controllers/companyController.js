@@ -87,7 +87,7 @@ const companyController = {
         try{
             let data = await db.promise().query(`Select * from companydatadivided where companyID = ${parseInt(companyID)} AND companyReportYear = ${parseInt(year)}`);
             //console.log(data[0][0]);
-            const data2 = await db.promise().query(`Select companyName, companyWebsite, ImageID from company where companyID = ${parseInt(companyID)}`);
+            const data2 = await db.promise().query(`Select companyName, companyDescription, companyWebsite, ImageID from company where companyID = ${parseInt(companyID)}`);
             //console.log(data2[0][0]);
             data = {...data[0][0],...data2[0][0]};
             //console.log(data);
