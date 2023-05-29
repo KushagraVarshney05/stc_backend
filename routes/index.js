@@ -19,6 +19,7 @@ router.get('/companyCTCSearch/:CTCsearch',auth,companyController.companyCTCSearc
 router.get('/islike/:email',auth,companyController.islike);
 router.get('/like/:email',auth,companyController.like);
 router.get('/countlike',auth,companyController.countlike);
+router.get('/comapny/available',companyController.companyAvailableReport);
 router.get('/companySearch/:companyID/:year',auth,companyController.specificCompanyData);
 router.get('/requestResetPassword/:email',loginController.requestResetPassword);
 router.post('/ResetPassword/',loginController.resetPassword);

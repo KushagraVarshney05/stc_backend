@@ -40,8 +40,6 @@ const companyController = {
         }catch(e){
             res.status(400).send({error: e})  
         }
-
-         
     },
     async companyCTCSearch(req,res,next){
         const {CTCsearch} = req.params;
@@ -80,6 +78,16 @@ const companyController = {
         }catch(e){
             res.status(400).send({error: e})  
         }
+    },
+    async companyAvailableReport(req,res,next){
+       const {companyID} = req.params;
+       try{
+             const data = await db.promise().query(`SELECT companyReportYear FROM companydatadivided WHERE companyID = ${parseInt(companyID)} GROUP BY companyReportYear ORDER BY companyReportYear DESC;`)
+             res.status(200).send({data});
+       }catch(e)
+       {
+        res.status(400).send({error: e})  
+       }
     },
     async specificCompanyData(req,res,next){
         const {companyID, year} = req.params;
