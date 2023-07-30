@@ -1,5 +1,5 @@
 const express = require("express");
-const {loginController, companyController} = require("../controllers");
+const {loginController, companyController, testController} = require("../controllers");
 const auth = require("../middlewares/auth");
 const counting = require("../middlewares/counting")
 const router = express.Router();
@@ -24,5 +24,12 @@ router.get('/companySearch/:companyID/:year',auth,companyController.specificComp
 router.get('/requestResetPassword/:email',loginController.requestResetPassword);
 router.post('/ResetPassword/',loginController.resetPassword);
 router.post('/feedback',companyController.feedback);
-router.get('/views',loginController.views)
+router.get('/views',loginController.views);
+
+
+
+router.get("/test/all",testController.fetchAllTest);
+router.get("/test/:TestID",testController.fetchQuestion);
 module.exports = router;  
+
+
