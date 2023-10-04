@@ -4,7 +4,7 @@ const JwtService = require("../services/JwtService");
 
 const auth = async (req,res,next)=>{
     let authHeader = req.headers.authorization;
-    console.log(authHeader);
+    //console.log(authHeader);
     if(!authHeader){
         return next(CustomErrorHandler.unAuthorized());
     }

@@ -22,7 +22,7 @@ const companyController = {
     async classSearch(req,res,next){
         const {classID} = req.params;
         try{
-            const data = await db.promise().query(`SELECT company.companyID, company.companyName ,companydatadivided.companyEligibility, companydatadivided.companyJOBProfile  , companydatadivided.companyCTC FROM company INNER JOIN companydatadivided ON companydatadivided.companyID = company.companyID where company.companyClass = ${parseInt(classID)} AND companydatadivided.companyReportApprovalStatus = "Approved" AND companydatadivided.companyReportYear=(SELECT MAX(companydatadivided.companyReportYear) from companydatadivided)`);
+            const data = await db.promise().query(`SELECT c.companyID, c.companyName, cd.companyEligibility, cd.companyJOBProfile, cd.companyCTC FROM company c INNER JOIN ( SELECT companyID, MAX(companyReportYear) AS latestYear FROM companydatadivided GROUP BY companyID ) t2 ON c.companyID = t2.companyID INNER JOIN companydatadivided cd ON t2.companyID = cd.companyID AND t2.latestYear = cd.companyReportYear WHERE c.companyClass = ${parseInt(classID)} AND cd.companyReportApprovalStatus = "Approved";`);
             
             res.status(201).send({data: data[0]})
         }catch(e){
@@ -34,8 +34,8 @@ const companyController = {
     async companySearch(req,res,next){
         const {search} = req.params;
         try{
-            const data = await db.promise().query(`SELECT company.companyID, company.companyName ,companydatadivided.companyEligibility, companydatadivided.companyJOBProfile  , companydatadivided.companyCTC FROM company INNER JOIN companydatadivided ON companydatadivided.companyID = company.companyID where LOWER(company.companyName) LIKE "${search}%" AND companydatadivided.companyReportApprovalStatus = "Approved"`);
-            
+            //const data = await db.promise().query(`SELECT company.companyID, company.companyName ,companydatadivided.companyEligibility, companydatadivided.companyJOBProfile  , companydatadivided.companyCTC FROM company INNER JOIN companydatadivided ON companydatadivided.companyID = company.companyID where LOWER(company.companyName) LIKE "${search}%" AND companydatadivided.companyReportApprovalStatus = "Approved"`);
+            const data = await db.promise().query(`SELECT c.companyID, c.companyName, cd.companyEligibility, cd.companyJOBProfile, cd.companyCTC FROM company c INNER JOIN ( SELECT companyID, MAX(companyReportYear) AS latestYear FROM companydatadivided GROUP BY companyID ) t2 ON c.companyID = t2.companyID INNER JOIN companydatadivided cd ON t2.companyID = cd.companyID AND t2.latestYear = cd.companyReportYear WHERE LOWER(c.companyName) LIKE "${search}%" AND cd.companyReportApprovalStatus = "Approved"`);
             res.status(201).send({data: data[0]})
         }catch(e){
             res.status(400).send({error: e})  
@@ -94,14 +94,38 @@ const companyController = {
         //console.log(companyID, year)
         try{
             let data = await db.promise().query(`Select * from companydatadivided where companyID = ${parseInt(companyID)} AND companyReportYear = ${parseInt(year)}`);
-            //console.log(data[0][0]);
+            console.log(data[0][0]);
             const data2 = await db.promise().query(`Select companyName, companyDescription, companyWebsite, ImageID from company where companyID = ${parseInt(companyID)}`);
-            //console.log(data2[0][0]);
+            console.log(data2[0][0]);
             data = {...data[0][0],...data2[0][0]};
             //console.log(data);
             res.status(201).send({data: data})
         }catch(e){
             res.status(400).send({error: e})  
+        }
+    },
+
+
+    async QuestionCompanyList(req, res, next){
+        try{
+            const data = await db.promise().query(`Select companyID, Company from CompanyQuestion Group By Company`)
+            console.log(data[0]);
+            res.status(200).json({data: data[0]});
+        }catch(e){
+            res.status(500).json({msg: "Server Error"})
+        }
+    },
+    async CompanyQuestion(req, res, next){
+        const {id} = req.params;
+        console.log(id)
+        try{
+            console.log("HI");
+            const data = await db.promise().query(`Select * from CompanyQuestion where companyID = ${parseInt(id)}`)
+            console.log(data[0]);
+            res.status(200).json({data: data[0]});
+        }catch(e){
+            console.log(e);
+            res.status(500).json({msg: "Server Error"})
         }
     },
     async feedback(req,res,next){

@@ -5,8 +5,8 @@ const bodyParser = require('body-parser');
 const compression = require("compression");
 const helmet = require("helmet");
 const app = express();
-const worker = require("./scheduler/worker")
-const kue = require("./scheduler/kue")
+//const worker = require("./scheduler/worker")
+//const kue = require("./scheduler/kue")
 const routes = require("./routes/index.js");
 const cors = require("cors");
 
