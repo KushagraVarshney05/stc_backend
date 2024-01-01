@@ -11,7 +11,7 @@ const { QueryTypes } = require("sequelize");
 //const kue = require("./scheduler/kue")
 const routes = require("./routes/index.js");
 
-const adminRoutes = require("./routes/registerAuth");
+const adminRoutes = require("./routes/adminAuth");
 const cors = require("cors");
 
 app.use(compression());
