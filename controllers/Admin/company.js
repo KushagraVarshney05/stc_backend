@@ -8,7 +8,6 @@ const addCompany = async (req, res) => {
     companyEstablishment,
     companyWebsite,
     companyAddedBy,
-    imageID,
   } = req.body;
 
   try {
