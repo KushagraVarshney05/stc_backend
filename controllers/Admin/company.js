@@ -43,8 +43,9 @@ const getCompanyData = async (req,res,next) => {
       return next(CustomErrorHandler.serverError());
       }
 };
-const upadteCompany = async (req,res,next) => {
-  const {companyID} = req.params;
+const updateCompany = async (req,res,next) => {
+  const {id} = req.params;
+  console.log(id);
   const {
     companyName,
     companyClass,
@@ -59,7 +60,7 @@ const upadteCompany = async (req,res,next) => {
     const data = await db
       .promise()
       .query(
-        `UPDATE company SET companyName = '${companyName}', companyClass = '${companyClass}', companyDescription = '${companyDescription}', companyEstablishment = '${companyEstablishment}', companyWebsite = '${companyWebsite}', companyAddedBy = '${companyAddedBy}' WHERE companyID = ${parseInt(companyID)}`
+        `UPDATE company SET companyName = '${companyName}', companyClass = '${companyClass}', companyDescription = '${companyDescription}', companyEstablishment = '${companyEstablishment}', companyWebsite = '${companyWebsite}', companyAddedBy = '${companyAddedBy}' WHERE companyID = ${parseInt(id)}`
       );
 
     res.status(201).json({ data: data[0] });
@@ -67,13 +68,14 @@ const upadteCompany = async (req,res,next) => {
     res.status(400).json({ error: e });
   }
 };
-const deleteCompany = async (req,res,next) => {
-  const {companyID} = req.params;
+const deleteCompany = async (req, res, next) => {
+  const Id = req.body.CompanyID;
+  console.log(req.body.CompanyID);
   try {
     const data = await db
       .promise()
       .query(
-        `DELETE FROM company WHERE companyID = ${parseInt(companyID)}`
+        `DELETE FROM company WHERE companyID IN (${Id.map((id) => parseInt(id)).join(",")})`
       );
 
     res.status(201).json({ data: data[0] });
@@ -82,7 +84,9 @@ const deleteCompany = async (req,res,next) => {
   }
 };
 const getCompany = async (req,res,next) => {
-  const {companyID} = req.params;
+
+  const {id} = req.params;
+  console.log(id);
   try {
     const data = await db
       .promise()
@@ -90,7 +94,7 @@ const getCompany = async (req,res,next) => {
         `SELECT *
         FROM company
         LEFT JOIN class ON company.companyClass = class.classID
-        LEFT JOIN users ON company.companyAddedBy = users.userID WHERE companyID = ${parseInt(companyID)}`
+        LEFT JOIN users ON company.companyAddedBy = users.userID WHERE company.companyID = ${parseInt(id)}`
       );
 
     res.status(201).json({ data: data[0] });
@@ -103,7 +107,7 @@ const getCompany = async (req,res,next) => {
 module.exports = {
   addCompany,
   getCompanyData,
-  upadteCompany,
+  updateCompany,
   deleteCompany,
   getCompany
 };
