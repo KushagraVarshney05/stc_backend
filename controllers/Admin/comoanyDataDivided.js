@@ -160,7 +160,7 @@ const getCompanyData = async (req, res, next) => {
       return next(CustomErrorHandler.wrongCredentials());
     }
 
-    return res.status(200).json({ success: true, data });
+    return res.status(200).json({ data: data[0] });
   } catch (error) {
     console.log(error);
     return next(CustomErrorHandler.serverError());
