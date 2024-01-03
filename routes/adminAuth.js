@@ -38,6 +38,5 @@ router.get("/getCompanyData/:id", adminAuth, getCompanyData);
 
 router.post("/addClass", adminAuth, addClass);
 
-router.get("/getCompanyName/:id", adminAuth, getCompanyName);
-
+router.get("/getCompanyNames", adminAuth, getCompanyName);
 module.exports = router;

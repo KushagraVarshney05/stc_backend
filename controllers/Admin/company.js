@@ -116,13 +116,9 @@ const getCompany = async (req, res, next) => {
   }
 };
 const getCompanyName= async (req, res, next) => {
-  const { id } = req.params;
-  console.log(id);
   try {
     const data = await db.promise().query(
-      `SELECT companyName
-        FROM company
-        WHERE companyID = ${parseInt(id)}`
+      `SELECT companyID, companyName FROM company`
     );
 
     res.status(201).json({ data: data[0] });
