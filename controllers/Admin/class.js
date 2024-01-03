@@ -2,7 +2,7 @@ const db = require("../../config/db");
 const CustomErrorHandler = require("../../services/CustomErrorHandler");
 
 const addClass = async (req, res) => {
-  const { className } = req.body;
+  const { classID, className } = req.body;
 
   try {
     const data = await db

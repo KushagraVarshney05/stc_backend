@@ -11,6 +11,7 @@ const {
   updateCompany,
   deleteCompany,
   getCompany,
+  getCompanyName,
 } = require("../controllers/Admin/company");
 
 const {
@@ -34,6 +35,9 @@ router.get("/getCompanyDataDivided", adminAuth, getCompanyDataDivided);
 router.post("/updateCompanyData/:id", adminAuth, updateCompanyData);
 router.get("/deleteCompanyData/:id", adminAuth, deleteCompanyData);
 router.get("/getCompanyData/:id", adminAuth, getCompanyData);
+
 router.post("/addClass", adminAuth, addClass);
+
+router.get("/getCompanyName/:id", adminAuth, getCompanyName);
 
 module.exports = router;
