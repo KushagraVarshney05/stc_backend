@@ -152,7 +152,7 @@ const getCompanyData = async (req, res, next) => {
             FROM companydatadivided
             LEFT JOIN company ON companydatadivided.companyID = company.companyID
             LEFT JOIN users ON companydatadivided.companyReportAddedBy = users.userID
-            LEFT JOIN class ON company.companyClass = class.classID WHERE companyID = ${parseInt(
+            LEFT JOIN class ON company.companyClass = class.classID WHERE companydatadivided.companyID = ${parseInt(
               id
             )}`);
 
@@ -162,6 +162,7 @@ const getCompanyData = async (req, res, next) => {
 
     return res.status(200).json({ success: true, data });
   } catch (error) {
+    console.log(error);
     return next(CustomErrorHandler.serverError());
   }
 };
