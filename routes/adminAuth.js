@@ -34,7 +34,7 @@ router.get("/getCompanyDataDivided", adminAuth, getCompanyDataDivided);
 router.post("/updateCompanyData/:id", adminAuth, updateCompanyData);
 router.get("/deleteCompanyData/:id", adminAuth, deleteCompanyData);
 router.get("/getCompanyData/:id", adminAuth, getCompanyData);
-router.get("/getCompanyName/:id", adminAuth, getCompanyName);
+router.get("/getCompanyNames", adminAuth, getCompanyName);
 
 
 module.exports = router;

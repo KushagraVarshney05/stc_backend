@@ -3,11 +3,11 @@ const CustomErrorHandler = require("../../services/CustomErrorHandler");
 
 const addCompanyData = async (req, res, next) => {
     const { 
-      dataID,
-     companyID,
-     companyNumOfRounds,
-     companyCTC,
-     companyEligibility,
+      
+      companyName,
+      companyNumOfRounds,
+      companyCTC,
+      companyEligibility,
      companyJOBProfile,
      companyFirstRoundName,
      companyFirstRoundDescrip,
@@ -24,7 +24,6 @@ const addCompanyData = async (req, res, next) => {
      companyAdditionalRoundDescrip,
      companyReportApprovalStatus,
      companyPracticeDetails,
-     companyReportAddDate,
      companyReportAddedBy,
      companyReportYear,
      reportFeedBack,
@@ -34,7 +33,7 @@ const addCompanyData = async (req, res, next) => {
       const data = await db
         .promise()
         .query(
-          `INSERT INTO companydatadivided (dataID,companyID,companyNumOfRounds,companyCTC,companyEligibility,companyJOBProfile,companyFirstRoundName,companyFirstRoundDescrip,companyFirstRoundDuration,companySecondRoundName,companySecondRoundDescrip,companySecondRoundDuration,companyThirdRoundName,companyThirdRoundDescrip,companyThirdRoundDuration,companyFourthRoundName,companyFourthRoundDescrip,companyFourthRoundDuration,companyAdditionalRoundDescrip,companyReportApprovalStatus,companyPracticeDetails,companyReportAddDate,companyReportAddedBy,companyReportYear,reportFeedBack) VALUES ('${dataID}','${companyID}','${companyNumOfRounds}','${companyCTC}','${companyEligibility}','${companyJOBProfile}','${companyFirstRoundName}','${companyFirstRoundDescrip}','${companyFirstRoundDuration}','${companySecondRoundName}','${companySecondRoundDescrip}','${companySecondRoundDuration}','${companyThirdRoundName}','${companyThirdRoundDescrip}','${companyThirdRoundDuration}','${companyFourthRoundName}','${companyFourthRoundDescrip}','${companyFourthRoundDuration}','${companyAdditionalRoundDescrip}','${companyReportApprovalStatus}','${companyPracticeDetails}','${companyReportAddDate}','${companyReportAddedBy}','${companyReportYear}','${reportFeedBack}')`
+          `INSERT INTO companydatadivided (companyID,companyNumOfRounds,companyCTC,companyEligibility,companyJOBProfile,companyFirstRoundName,companyFirstRoundDescrip,companyFirstRoundDuration,companySecondRoundName,companySecondRoundDescrip,companySecondRoundDuration,companyThirdRoundName,companyThirdRoundDescrip,companyThirdRoundDuration,companyFourthRoundName,companyFourthRoundDescrip,companyFourthRoundDuration,companyAdditionalRoundDescrip,companyPracticeDetails,companyReportAddedBy,companyReportYear,reportFeedBack) VALUES ('${companyName}','${companyNumOfRounds}','${companyCTC}','${companyEligibility}','${companyJOBProfile}','${companyFirstRoundName}','${companyFirstRoundDescrip}','${companyFirstRoundDuration}','${companySecondRoundName}','${companySecondRoundDescrip}','${companySecondRoundDuration}','${companyThirdRoundName}','${companyThirdRoundDescrip}','${companyThirdRoundDuration}','${companyFourthRoundName}','${companyFourthRoundDescrip}','${companyFourthRoundDuration}','${companyAdditionalRoundDescrip}','${companyPracticeDetails}','${companyReportAddedBy}','${companyReportYear}','${reportFeedBack}')`
         );
   
       res.status(201).json({ data: data[0] });
