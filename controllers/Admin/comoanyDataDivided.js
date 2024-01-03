@@ -1,4 +1,6 @@
 const db = require("../../config/db");
+const CustomErrorHandler = require("../../services/CustomErrorHandler");
+
 const addCompanyData = async (req, res, next) => {
     const { 
       dataID,

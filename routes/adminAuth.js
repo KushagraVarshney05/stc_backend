@@ -23,7 +23,7 @@ const {
 
 router.post("/loginAdmin", loginAdmin);
 router.post("/registerAdmin", adminAuth, registerAdmin);
-router.get("/getCompanies", adminAuth, getCompanyData);
+router.get("/getCompanies", adminAuth, getCompanies);
 router.post("/addCompany", adminAuth, addCompany);
 router.post("/updateCompany/:id", adminAuth, updateCompany);
 router.get("/getCompany/:id", adminAuth, getCompany);
