@@ -115,6 +115,21 @@ const getCompany = async (req, res, next) => {
     res.status(400).json({ error: e });
   }
 };
+const getCompanyName= async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id);
+  try {
+    const data = await db.promise().query(
+      `SELECT companyName
+        FROM company
+        WHERE companyID = ${parseInt(id)}`
+    );
+
+    res.status(201).json({ data: data[0] });
+  } catch (e) {
+    res.status(400).json({ error: e });
+  }
+}
 
 
 
@@ -124,4 +139,5 @@ module.exports = {
   updateCompany,
   deleteCompany,
   getCompany,
+  getCompanyName
 };
