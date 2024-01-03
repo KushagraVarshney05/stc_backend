@@ -14,12 +14,13 @@ const {
 } = require("../controllers/Admin/company");
 
 const {
-    addCompanyData,
-    getCompanyDataDivided,
-    updateCompanyData,
-    deleteCompanyData,
-    getCompanyData
-    } = require("../controllers/Admin/comoanyDataDivided");
+  addCompanyData,
+  getCompanyDataDivided,
+  updateCompanyData,
+  deleteCompanyData,
+  getCompanyData,
+} = require("../controllers/Admin/comoanyDataDivided");
+const { addClass } = require("../controllers/Admin/class");
 
 router.post("/loginAdmin", loginAdmin);
 router.post("/registerAdmin", adminAuth, registerAdmin);
@@ -33,6 +34,6 @@ router.get("/getCompanyDataDivided", adminAuth, getCompanyDataDivided);
 router.post("/updateCompanyData/:id", adminAuth, updateCompanyData);
 router.get("/deleteCompanyData/:id", adminAuth, deleteCompanyData);
 router.get("/getCompanyData/:id", adminAuth, getCompanyData);
-
+router.post("/addClass", adminAuth, addClass);
 
 module.exports = router;
