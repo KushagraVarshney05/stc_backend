@@ -1,6 +1,7 @@
 const db = require("../../config/db");
 
 const addCompany = async (req, res) => {
+  console.log(req.body);  
   const {
     companyName,
     companyClass,
@@ -9,8 +10,10 @@ const addCompany = async (req, res) => {
     companyWebsite,
     companyAddedBy,
   } = req.body;
+  
 
   try {
+
     const data = await db
       .promise()
       .query(
@@ -19,11 +22,11 @@ const addCompany = async (req, res) => {
 
     res.status(201).json({ data: data[0] });
   } catch (e) {
+    console.log(e);
     res.status(400).json({ error: e });
   }
 };
-
-const getCompanyData = async (req, res, next) => {
+const getCompanies = async (req, res, next) => {
   try {
     const data = await db.promise().query(`SELECT *
       FROM company
@@ -113,9 +116,11 @@ const getCompany = async (req, res, next) => {
   }
 };
 
+
+
 module.exports = {
   addCompany,
-  getCompanyData,
+  getCompanies,
   updateCompany,
   deleteCompany,
   getCompany,
