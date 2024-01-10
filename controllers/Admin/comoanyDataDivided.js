@@ -166,10 +166,57 @@ const getCompanyData = async (req, res, next) => {
     return next(CustomErrorHandler.serverError());
   }
 };
+
+const getCompanyDataByDataId = async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    const data = await db.promise().query(`SELECT *
+            FROM companydatadivided
+            LEFT JOIN company ON companydatadivided.companyID = company.companyID
+            LEFT JOIN users ON companydatadivided.companyReportAddedBy = users.userID
+            LEFT JOIN class ON company.companyClass = class.classID WHERE companydatadivided.dataID = ${parseInt(
+              id
+            )}`);
+
+    if (!data[0]) {
+      return next(CustomErrorHandler.wrongCredentials());
+    }
+
+    return res.status(200).json({ data: data[0] });
+  } catch (error) {
+    console.log(error);
+    return next(CustomErrorHandler.serverError());
+  }
+};
+
+const upadateDatabyDataID = async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id);
+
+  const { companyReportApprovalStatus } = req.body;
+
+  try {
+    const data = await db
+      .promise()
+      .query(
+        `UPDATE companydatadivided SET companyReportApprovalStatus = ? WHERE dataID = ?`,
+        [companyReportApprovalStatus, id]
+      );
+    res.status(201).json({ data: data[0] });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ error: e });
+  }
+};
+
 module.exports = {
   addCompanyData,
   getCompanyDataDivided,
   updateCompanyData,
   deleteCompanyData,
   getCompanyData,
+  getCompanyDataByDataId,
+  upadateDatabyDataID,
 };
