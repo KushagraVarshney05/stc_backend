@@ -191,7 +191,7 @@ const getCompanyDataByDataId = async (req, res, next) => {
   }
 };
 
-const upadateDatabyDataID = async (req, res, next) => {
+const upadatedivided = async (req, res, next) => {
   const { id } = req.params;
   console.log(id);
 
@@ -218,5 +218,5 @@ module.exports = {
   deleteCompanyData,
   getCompanyData,
   getCompanyDataByDataId,
-  upadateDatabyDataID,
+  upadatedivided,
 };

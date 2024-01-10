@@ -22,6 +22,7 @@ const {
   getCompanyData,
   getCompanyDataByDataId,
   upadateDatabyDataID,
+  upadatedivided,
 } = require("../controllers/Admin/comoanyDataDivided");
 const { addClass } = require("../controllers/Admin/class");
 
@@ -39,7 +40,7 @@ router.get("/deleteCompanyData/:id", adminAuth, deleteCompanyData);
 router.get("/getCompanyData/:id", adminAuth, getCompanyData);
 router.get("/getCompanyDataByDataId/:id", adminAuth, getCompanyDataByDataId);
 
-router.post("/updateCompanyData/:id", adminAuth, upadateDatabyDataID);
+router.post("/updateCompanyDataID/:id", adminAuth, upadatedivided);
 
 router.post("/addClass", adminAuth, addClass);
 
