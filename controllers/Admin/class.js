@@ -15,7 +15,21 @@ const addClass = async (req, res) => {
     res.status(400).json({ error: e });
   }
 };
+const getClasses = async (req, res, next) => {
+  try {
+    const data = await db.promise().query(`SELECT * FROM class`);
+
+    if (!data[0]) {
+      return next(CustomErrorHandler.wrongCredentials());
+    }
+
+    return res.status(200).json({ success: true, data:data[0] });
+  } catch (error) {
+    return next(CustomErrorHandler.serverError());
+  }
+}
 
 module.exports = {
   addClass,
+  getClasses,
 };
