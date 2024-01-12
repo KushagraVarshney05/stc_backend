@@ -37,8 +37,9 @@ const loginAdmin = async (req, res, next) => {
       const userType = data[0][0].userType;
       console.log(data[0][0]);
       const userId = data[0][0].userID;
+      const userName = data[0][0].userName;
 
-      res.status(201).json({ access_token, userType, userId });
+      res.status(201).json({ access_token, userType, userId ,userName});
     } catch (e) {
       return next(CustomErrorHandler.serverError());
     }
