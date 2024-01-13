@@ -211,6 +211,18 @@ const upadatedivided = async (req, res, next) => {
   }
 };
 
+const totalCount = async (req, res, next) => {
+  try {
+    const data = await db
+      .promise()
+      .query(`SELECT COUNT(*) FROM companydatadivided`);
+    res.status(200).json({ data: data[0] });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ error: e });
+  }
+};
+
 module.exports = {
   addCompanyData,
   getCompanyDataDivided,
@@ -219,4 +231,5 @@ module.exports = {
   getCompanyData,
   getCompanyDataByDataId,
   upadatedivided,
+  totalCount,
 };
