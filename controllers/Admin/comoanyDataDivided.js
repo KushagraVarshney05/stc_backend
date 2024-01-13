@@ -213,10 +213,27 @@ const upadatedivided = async (req, res, next) => {
 
 const totalCount = async (req, res, next) => {
   try {
-    const data = await db
+    const dataReport = await db
       .promise()
-      .query(`SELECT COUNT(*) FROM companydatadivided`);
-    res.status(200).json({ data: data[0] });
+      .query(`SELECT count(dataID) as COUNT FROM companydatadivided`);
+
+    const dataCompany = await db
+      .promise()
+      .query(`SELECT COUNT(*) AS totalCompanies FROM company`);
+
+    const dataUsers = await db
+      .promise()
+      .query(`SELECT COUNT(*) AS totalUsers FROM users`);
+
+    const dataStudents = await db
+      .promise()
+      .query(`SELECT COUNT(*) AS totalStudents FROM User`);
+    res.status(200).json({
+      dataReport: dataReport[0],
+      dataCompany: dataCompany[0],
+      dataUsers: dataUsers[0],
+      dataStudents: dataStudents[0],
+    });
   } catch (e) {
     console.log(e);
     res.status(500).json({ error: e });

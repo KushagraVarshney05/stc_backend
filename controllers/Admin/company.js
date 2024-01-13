@@ -1,7 +1,7 @@
 const db = require("../../config/db");
 
 const addCompany = async (req, res) => {
-  console.log(req.body);  
+  console.log(req.body);
   const {
     companyName,
     companyClass,
@@ -10,10 +10,8 @@ const addCompany = async (req, res) => {
     companyWebsite,
     companyAddedBy,
   } = req.body;
-  
 
   try {
-
     const data = await db
       .promise()
       .query(
@@ -52,18 +50,20 @@ const updateCompany = async (req, res, next) => {
     companyDescription,
     companyEstablishment,
     companyWebsite,
+    classID,
   } = req.body;
 
   try {
     const data = await db
       .promise()
       .query(
-        `UPDATE company SET companyName = ?, companyDescription = ?, companyEstablishment = ?, companyWebsite = ? WHERE companyID = ?`,
+        `UPDATE company SET companyName = ?, companyDescription = ?, companyEstablishment = ?, companyWebsite = ?,companyClass=? WHERE companyID = ?`,
         [
           companyName,
           companyDescription,
           companyEstablishment,
           companyWebsite,
+          classID,
           id,
         ]
       );
@@ -115,19 +115,29 @@ const getCompany = async (req, res, next) => {
     res.status(400).json({ error: e });
   }
 };
-const getCompanyName= async (req, res, next) => {
+const getCompanyName = async (req, res, next) => {
   try {
-    const data = await db.promise().query(
-      `SELECT companyID, companyName FROM company`
-    );
+    const data = await db
+      .promise()
+      .query(`SELECT companyID, companyName FROM company`);
 
     res.status(201).json({ data: data[0] });
   } catch (e) {
     res.status(400).json({ error: e });
   }
-}
+};
 
+const totalCompanies = async (req, res, next) => {
+  try {
+    const data = await db
+      .promise()
+      .query(`SELECT COUNT(*) AS totalCompanies FROM company`);
 
+    res.status(201).json({ data: data[0] });
+  } catch (e) {
+    res.status(400).json({ error: e });
+  }
+};
 
 module.exports = {
   addCompany,
@@ -135,5 +145,6 @@ module.exports = {
   updateCompany,
   deleteCompany,
   getCompany,
-  getCompanyName
+  getCompanyName,
+  totalCompanies,
 };
