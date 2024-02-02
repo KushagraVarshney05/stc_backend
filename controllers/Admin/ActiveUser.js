@@ -1,5 +1,10 @@
 const db = require("../../config/db");
 const CustomErrorHandler = require("../../services/CustomErrorHandler");
+const bcrypt = require("bcryptjs");
+const JwtService = require("../../services/JwtService");
+const { QueryTypes } = require("sequelize");
+const { sequelize } = require("../../config/db");
+const { Op } = require("sequelize");
 
 const activeCount = async (req, res, next) => {
   try {
@@ -47,7 +52,29 @@ const activeUser = async (req, res, next) => {
   }
 };
 
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const data = await db
+      .promise()
+      .query("SELECT * FROM StudentTable WHERE email = ?", [email]);
+    if (data[0].length === 0) {
+      return next(CustomErrorHandler.notFound("No user with this email"));
+    }
+    const user = data[0][0];
+    const match = await bcrypt.compare(password, user.Password);
+    if (!match) {
+      return next(CustomErrorHandler.wrongCredentials());
+    }
+    const accessToken = JwtService.sign({ id: user.id, email: user.email });
+    res.status(200).json({ accessToken });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   activeCount,
   activeUser,
+  login,
 };

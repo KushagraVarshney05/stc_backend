@@ -9,11 +9,12 @@ const db = {
   port: 3306,
   waitForConnections: true,
   connectionLimit: 10,
-  // connectTimeout: 15000,
+  connectTimeout: 30000, // 30 seconds
   rowsAsArray: false,
   enableKeepAlive: true,
   multipleStatements: true,
 };
+
 // var connection;
 
 const connection = mysql.createPool(db);

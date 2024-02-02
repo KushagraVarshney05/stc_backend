@@ -14,6 +14,9 @@ const routes = require("./routes/index.js");
 const adminRoutes = require("./routes/adminAuth");
 const cors = require("cors");
 
+const { getdata, upload } = require("./addToDb");
+const { login } = require("./controllers/Admin/ActiveUser");
+
 app.use(compression());
 app.use(helmet());
 
@@ -24,6 +27,8 @@ app.use(express.json());
 app.use("/api", routes);
 app.use("/api/admin", adminRoutes);
 app.use(errorHandler);
+app.post("/addStudent", upload);
+app.post("/login", login);
 
 app.get("/yashvarshney", async (req, res) => {
   const data = await db.promise().query(`SELECT table_name
