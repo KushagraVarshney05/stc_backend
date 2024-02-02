@@ -27,6 +27,9 @@ const addCompanyData = async (req, res, next) => {
     companyReportYear,
     reportFeedBack,
   } = req.body;
+  if(!companyReportAddedBy){
+    return next(CustomErrorHandler.wrongCredentials());
+  }
   console.log(req.body);
   try {
     const data = await db
