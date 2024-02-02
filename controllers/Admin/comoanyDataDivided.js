@@ -227,7 +227,7 @@ const totalCount = async (req, res, next) => {
 
     const dataStudents = await db
       .promise()
-      .query(`SELECT COUNT(*) AS totalStudents FROM User`);
+      .query(`SELECT COUNT(*) AS totalStudents FROM StudentTable`);
     res.status(200).json({
       dataReport: dataReport[0],
       dataCompany: dataCompany[0],

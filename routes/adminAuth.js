@@ -28,6 +28,11 @@ const {
 } = require("../controllers/Admin/comoanyDataDivided");
 const { addClass, getClasses } = require("../controllers/Admin/class");
 
+const { activeCount, activeUser } = require("../controllers/Admin/ActiveUser");
+
+router.get("/activeCount", activeCount);
+router.post("/activeUser", activeUser);
+
 router.post("/loginAdmin", loginAdmin);
 router.post("/registerAdmin", adminAuth, registerAdmin);
 router.get("/getCompanies", adminAuth, getCompanies);
