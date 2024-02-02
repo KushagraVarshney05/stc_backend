@@ -27,7 +27,7 @@ const addCompanyData = async (req, res, next) => {
     companyReportYear,
     reportFeedBack,
   } = req.body;
-  if(!companyReportAddedBy){
+  if (!companyReportAddedBy) {
     return next(CustomErrorHandler.wrongCredentials());
   }
   console.log(req.body);
@@ -231,11 +231,22 @@ const totalCount = async (req, res, next) => {
     const dataStudents = await db
       .promise()
       .query(`SELECT COUNT(*) AS totalStudents FROM StudentTable`);
+
+    const dataActive = await db
+      .promise()
+      .query("Select COUNT(*) AS totalActiveStudents FROM activeUser");
+
+    const dataAciveCount = await db
+      .promise()
+      .query("Select sum(Count) AS CountActiveStudent FROM activeUser");
+
     res.status(200).json({
       dataReport: dataReport[0],
       dataCompany: dataCompany[0],
       dataUsers: dataUsers[0],
       dataStudents: dataStudents[0],
+      dataActive: dataActive[0],
+      dataAciveCount: dataAciveCount[0],
     });
   } catch (e) {
     console.log(e);
