@@ -29,7 +29,8 @@ const {
 const { addClass, getClasses } = require("../controllers/Admin/class");
 
 const { activeCount, activeUser } = require("../controllers/Admin/ActiveUser");
-const { addQuestion } = require("../controllers/Admin/Questions");
+const { addQuestion ,getQuestions
+} = require("../controllers/Admin/Questions");
 
 router.get("/activeCount", activeCount);
 router.post("/activeUser", activeUser);
@@ -58,5 +59,7 @@ router.get("/getClasses", adminAuth, getClasses);
 
 router.get("/getCompanyNames", adminAuth, getCompanyName);
 router.post("/addQuestion", adminAuth, addQuestion);
+router.get("/getQuestions", adminAuth, getQuestions);
+
 
 module.exports = router;
