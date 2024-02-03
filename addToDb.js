@@ -83,7 +83,7 @@ const upload = async (req, res, next) => {
     const updatedWorkbook = xlsx.utils.book_new();
     const updatedSheet = xlsx.utils.aoa_to_sheet([columnNames, ...rows]);
     xlsx.utils.book_append_sheet(updatedWorkbook, updatedSheet, "Sheet1");
-    xlsx.writeFile(updatedWorkbook, "./yash.xlsx");
+    xlsx.writeFile(updatedWorkbook, "./data.xlsx");
 
     res.status(201).send({ data: "Data Added" });
   } catch (error) {
