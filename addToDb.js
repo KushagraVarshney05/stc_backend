@@ -40,6 +40,9 @@ const getdata = async () => {
 // getdata();
 const upload = async (req, res, next) => {
   try {
+    // Delete previous data from StudentTable
+    await db.promise().query("DELETE FROM StudentTable");
+
     const rows = await xlsxFile("./mca.xlsx");
     const columnNames = rows.shift(); // Separate first row with column names
 
