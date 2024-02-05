@@ -3,9 +3,9 @@ const mysql = require("mysql2");
 const db = {
   /* don't expose password or any sensitive info, done only for demo */
   host: "p3nlmysql173plsk.secureserver.net",
-  user: "user12345",
+  user: "stc_admin",
   password: "Akh123456@",
-  database: "src_check",
+  database: "stcdatabase",
   port: 3306,
   waitForConnections: true,
   connectionLimit: 10,
