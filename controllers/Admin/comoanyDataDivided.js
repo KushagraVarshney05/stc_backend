@@ -27,23 +27,77 @@ const addCompanyData = async (req, res, next) => {
     companyReportYear,
     reportFeedBack,
   } = req.body;
+
   if (!companyReportAddedBy) {
     return next(CustomErrorHandler.wrongCredentials());
   }
-  console.log(req.body);
-  try {
-    const data = await db
-      .promise()
-      .query(
-        `INSERT INTO companydatadivided (companyID,companyNumOfRounds,companyCTC,companyEligibility,companyJOBProfile,companyFirstRoundName,companyFirstRoundDescrip,companyFirstRoundDuration,companySecondRoundName,companySecondRoundDescrip,companySecondRoundDuration,companyThirdRoundName,companyThirdRoundDescrip,companyThirdRoundDuration,companyFourthRoundName,companyFourthRoundDescrip,companyFourthRoundDuration,companyAdditionalRoundDescrip,companyPracticeDetails,companyReportAddedBy,companyReportYear,reportFeedBack) VALUES ('${companyName}','${companyNumOfRounds}','${companyCTC}','${companyEligibility}','${companyJOBProfile}','${companyFirstRoundName}','${companyFirstRoundDescrip}','${companyFirstRoundDuration}','${companySecondRoundName}','${companySecondRoundDescrip}','${companySecondRoundDuration}','${companyThirdRoundName}','${companyThirdRoundDescrip}','${companyThirdRoundDuration}','${companyFourthRoundName}','${companyFourthRoundDescrip}','${companyFourthRoundDuration}','${companyAdditionalRoundDescrip}','${companyPracticeDetails}','${companyReportAddedBy}','${companyReportYear}','${reportFeedBack}')`
-      );
 
+  console.log(req.body);
+
+  try {
+    const query = `
+      INSERT INTO companydatadivided (
+        companyID,
+        companyNumOfRounds,
+        companyCTC,
+        companyEligibility,
+        companyJOBProfile,
+        companyFirstRoundName,
+        companyFirstRoundDescrip,
+        companyFirstRoundDuration,
+        companySecondRoundName,
+        companySecondRoundDescrip,
+        companySecondRoundDuration,
+        companyThirdRoundName,
+        companyThirdRoundDescrip,
+        companyThirdRoundDuration,
+        companyFourthRoundName,
+        companyFourthRoundDescrip,
+        companyFourthRoundDuration,
+        companyAdditionalRoundDescrip,
+        companyPracticeDetails,
+        companyReportAddedBy,
+        companyReportYear,
+        reportFeedBack
+      ) VALUES (
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+      )
+    `;
+    
+    const params = [
+      companyName,
+      companyNumOfRounds,
+      companyCTC,
+      companyEligibility,
+      companyJOBProfile,
+      companyFirstRoundName,
+      companyFirstRoundDescrip,
+      companyFirstRoundDuration,
+      companySecondRoundName,
+      companySecondRoundDescrip,
+      companySecondRoundDuration,
+      companyThirdRoundName,
+      companyThirdRoundDescrip,
+      companyThirdRoundDuration,
+      companyFourthRoundName,
+      companyFourthRoundDescrip,
+      companyFourthRoundDuration,
+      companyAdditionalRoundDescrip,
+      companyPracticeDetails,
+      companyReportAddedBy,
+      companyReportYear,
+      reportFeedBack
+    ];
+
+    const data = await db.promise().query(query, params);
+    
     res.status(201).json({ data: data[0] });
   } catch (e) {
     console.log(e);
     res.status(400).json({ error: e });
   }
 };
+
 const getCompanyDataDivided = async (req, res, next) => {
   try {
     const data = await db.promise().query(`SELECT *
@@ -93,43 +147,70 @@ const updateCompanyData = async (req, res, next) => {
   } = req.body;
 
   try {
-    const data = await db
-      .promise()
-      .query(
-        `UPDATE companydatadivided SET companyNumOfRounds = ?, companyCTC = ?, companyEligibility = ?, companyJOBProfile = ?, companyFirstRoundName = ?, companyFirstRoundDescrip = ?, companyFirstRoundDuration = ?, companySecondRoundName = ?, companySecondRoundDescrip = ?, companySecondRoundDuration = ?, companyThirdRoundName = ?, companyThirdRoundDescrip = ?, companyThirdRoundDuration = ?, companyFourthRoundName = ?, companyFourthRoundDescrip = ?, companyFourthRoundDuration = ?, companyAdditionalRoundDescrip = ?, companyReportApprovalStatus = ?, companyPracticeDetails = ?, companyReportAddDate = ?, companyReportAddedBy = ?, companyReportYear = ?, reportFeedBack = ? WHERE dataID = ?`,
-        [
-          companyNumOfRounds,
-          companyCTC,
-          companyEligibility,
-          companyJOBProfile,
-          companyFirstRoundName,
-          companyFirstRoundDescrip,
-          companyFirstRoundDuration,
-          companySecondRoundName,
-          companySecondRoundDescrip,
-          companySecondRoundDuration,
-          companyThirdRoundName,
-          companyThirdRoundDescrip,
-          companyThirdRoundDuration,
-          companyFourthRoundName,
-          companyFourthRoundDescrip,
-          companyFourthRoundDuration,
-          companyAdditionalRoundDescrip,
-          companyReportApprovalStatus,
-          companyPracticeDetails,
-          companyReportAddDate,
-          companyReportAddedBy,
-          companyReportYear,
-          reportFeedBack,
-          id,
-        ]
-      );
+    const query = `
+      UPDATE companydatadivided SET
+        companyNumOfRounds = ?,
+        companyCTC = ?,
+        companyEligibility = ?,
+        companyJOBProfile = ?,
+        companyFirstRoundName = ?,
+        companyFirstRoundDescrip = ?,
+        companyFirstRoundDuration = ?,
+        companySecondRoundName = ?,
+        companySecondRoundDescrip = ?,
+        companySecondRoundDuration = ?,
+        companyThirdRoundName = ?,
+        companyThirdRoundDescrip = ?,
+        companyThirdRoundDuration = ?,
+        companyFourthRoundName = ?,
+        companyFourthRoundDescrip = ?,
+        companyFourthRoundDuration = ?,
+        companyAdditionalRoundDescrip = ?,
+        companyReportApprovalStatus = ?,
+        companyPracticeDetails = ?,
+        companyReportAddDate = ?,
+        companyReportAddedBy = ?,
+        companyReportYear = ?,
+        reportFeedBack = ?
+      WHERE dataID = ?
+    `;
+    
+    const params = [
+      companyNumOfRounds,
+      companyCTC,
+      companyEligibility,
+      companyJOBProfile,
+      companyFirstRoundName,
+      companyFirstRoundDescrip,
+      companyFirstRoundDuration,
+      companySecondRoundName,
+      companySecondRoundDescrip,
+      companySecondRoundDuration,
+      companyThirdRoundName,
+      companyThirdRoundDescrip,
+      companyThirdRoundDuration,
+      companyFourthRoundName,
+      companyFourthRoundDescrip,
+      companyFourthRoundDuration,
+      companyAdditionalRoundDescrip,
+      companyReportApprovalStatus,
+      companyPracticeDetails,
+      companyReportAddDate,
+      companyReportAddedBy,
+      companyReportYear,
+      reportFeedBack,
+      id,
+    ];
+
+    const data = await db.promise().query(query, params);
+    
     res.status(201).json({ data: data[0] });
   } catch (e) {
     console.log(e);
     res.status(400).json({ error: e });
   }
 };
+
 const deleteCompanyData = async (req, res, next) => {
   const { id } = req.params;
   console.log(id);

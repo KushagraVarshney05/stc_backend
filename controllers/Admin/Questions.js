@@ -5,22 +5,25 @@ const addQuestion = async (req, res) => {
     console.log(req.body.questions[0].options);
     try {
         const { companyId, company, questions } = req.body;
-        questions.forEach(async (question) => {
-            if (question.options.every(option => option === '')) {
-
-            const data=await db.promise().query(`INSERT INTO CompanyQuestion (CompanyID, Company, Question) VALUES ('${companyId}', '${company}', '${question.question}')`);
-
+        for (const question of questions) {
+            try {
+                if (question.options.every(option => option === '')) {
+                    await db.promise().query(
+                        "INSERT INTO CompanyQuestion (CompanyID, Company, Question) VALUES (?, ?, ?)",
+                        [companyId, company, question.question]
+                    );
+                } else {
+                    const options = JSON.stringify(question.options);
+                    await db.promise().query(
+                        "INSERT INTO CompanyQuestion (CompanyID, Company, Question, Options) VALUES (?, ?, ?, ?)",
+                        [companyId, company, question.question, options]
+                    );
+                }
+            } catch (error) {
+                console.error(error);
+                throw error; // Throw error to catch block
             }
-            else{
-                const options = '[' +question.options.join(',')+']';
-            const data=await db.promise().query(`INSERT INTO CompanyQuestion (CompanyID, Company, Question, Options) VALUES ('${companyId}', '${company}', '${question.question}', '${options}')`);
-            }
-            
-
-            
-        });
-
-        
+        }
 
         res.status(201).json({ success: true, message: "Questions added successfully" });
     } catch (err) {
@@ -29,6 +32,7 @@ const addQuestion = async (req, res) => {
         res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
+
 const getQuestions = async (req, res, next) => {
     try {
         const data = await db.promise().query(`SELECT distinct Company FROM CompanyQuestion ORDER BY Company ASC`);
