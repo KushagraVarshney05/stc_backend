@@ -48,4 +48,5 @@ router.get("/views", loginController.views);
 
 router.get("/test/all", testController.fetchAllTest);
 router.get("/test/:TestID", testController.fetchQuestion);
+router.get("/year", auth, companyController.reportYearWise);
 module.exports = router;
