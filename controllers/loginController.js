@@ -78,7 +78,8 @@ const loginController = {
           // Handle the error as needed, for example, log it or throw a custom error.
         }
 
-        res.status(201).json({ access_token });
+        res.status(201).json({ access_token, username: data[0][0].userName });
+        console.log(data[0][0].userName);
       } catch (e) {
         return next(CustomErrorHandler.serverError());
       }
