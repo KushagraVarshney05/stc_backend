@@ -7,8 +7,8 @@ const helmet = require("helmet");
 const app = express();
 const db = require("./config/db");
 const { QueryTypes } = require("sequelize");
-//const worker = require("./scheduler/worker")
-//const kue = require("./scheduler/kue")
+const worker = require("./scheduler/worker")
+const kue = require("./scheduler/kue")
 const routes = require("./routes/index.js");
 
 const adminRoutes = require("./routes/adminAuth");
