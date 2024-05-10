@@ -334,6 +334,23 @@ const totalCount = async (req, res, next) => {
     res.status(500).json({ error: e });
   }
 };
+const getAllData = async(req, res, next) => {
+  try {
+    const data = await db.promise().query(`SELECT *
+        FROM companydatadivided
+        LEFT JOIN company ON companydatadivided.companyID = company.companyID
+        LEFT JOIN users ON companydatadivided.companyReportAddedBy = users.userID
+        LEFT JOIN class ON company.companyClass = class.classID`);
+
+    if (!data[0]) {
+      return next(CustomErrorHandler.wrongCredentials());
+    }
+
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    return next(CustomErrorHandler.serverError());
+  }
+}                                                                                               
 
 module.exports = {
   addCompanyData,
@@ -344,4 +361,5 @@ module.exports = {
   getCompanyDataByDataId,
   upadatedivided,
   totalCount,
+  getAllData
 };

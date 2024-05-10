@@ -25,6 +25,7 @@ const {
   upadateDatabyDataID,
   upadatedivided,
   totalCount,
+  getAllData,
 } = require("../controllers/Admin/comoanyDataDivided");
 const { addClass, getClasses } = require("../controllers/Admin/class");
 
@@ -60,6 +61,7 @@ router.get("/getClasses", adminAuth, getClasses);
 router.get("/getCompanyNames", adminAuth, getCompanyName);
 router.post("/addQuestion", adminAuth, addQuestion);
 router.get("/getQuestions", adminAuth, getQuestions);
+router.get("/getAllData", getAllData);
 
 
 module.exports = router;
